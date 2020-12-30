@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: debug
-      run: "echo '${{ matrix }}'"
+      run: "echo '${{ matrix.tags }}'"
 
     - name: Checkout
       uses: actions/checkout@v2
