@@ -59,7 +59,7 @@ for im in l[:2]:
     {
       "name": "%s-%s" % (im['version'], im['variant']),
       "os": "ubuntu-latest",
-      "tags:": ",".join(tags),
+      "tags:": ",".join(map(lambda x: "darknao/dotclear:%s" % (x,), tags)),
       "context": "%s/%s" % (im['variant'], im['version']),
       "dockerfile": im['file'],
       })
