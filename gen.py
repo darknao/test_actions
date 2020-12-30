@@ -38,6 +38,7 @@ latest = l[-1]['version']
 print("latest is %s" % (latest,))
 pprint(l)
 strategy = {
+  "max-parallel": 1,
   "fail-fast": False,
   "matrix": {
     "include": [],

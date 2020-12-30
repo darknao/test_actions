@@ -43,3 +43,4 @@ jobs:
         platforms: linux/amd64,linux/arm/v7
         push: false
         tags: ${{ matrix.tags }}
+        cache-from: type=registry,ref=darknao/dotclear:latest
