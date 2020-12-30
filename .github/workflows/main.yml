@@ -1,0 +1,45 @@
+name: CI
+on:
+  push:
+
+jobs:
+  gen:
+    name: gen
+    runs-on: ubuntu-latest
+    outputs:
+      strategy: ${{ steps.gen.outputs.strategy }}
+    steps:
+    - uses: actions/checkout@v2
+    - id: gen
+      name: gen
+      run: python gen.py
+
+  build:
+    strategy: ${{ fromJson(needs.gen.outputs.strategy) }}
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    #- name: Login to DockerHub
+    #  uses: docker/login-action@v1
+    #  with:
+    #    username: ${{ secrets.DOCKERHUB_USERNAME }}
+    #    password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    #- name: Build and push
+    #  uses: docker/build-push-action@v2
+    #  with:
+    #    context: .
+    #    file: ./Dockerfile
+    #    platforms: linux/amd64,linux/arm/v7
+    #    push: false
+    #    tags: ${{ steps.docker_meta.outputs.tags }}
+    #    labels: ${{ steps.docker_meta.outputs.labels }}
