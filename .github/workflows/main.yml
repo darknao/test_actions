@@ -20,6 +20,9 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
+    - name: debug
+      run: "echo '${{ matrix }}'"
+
     - name: Checkout
       uses: actions/checkout@v2
 
