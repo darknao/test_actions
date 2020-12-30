@@ -30,6 +30,7 @@ for df in dockerfiles:
   l.append({
     'version': version,
     'variant': variant,
+    'file': df,
     })
 
 l.sort(key=lambda f: StrictVersion(f['version']))
@@ -59,6 +60,7 @@ for im in l:
       "os": "ubuntu-latest",
       "tags:": tags,
       "context": "%s/%s" % (im['variant'], im['version']),
+      "dockerfile": im['file'],
       })
 
 pprint(strategy)
