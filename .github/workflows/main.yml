@@ -15,6 +15,7 @@ jobs:
       run: python gen.py
 
   build:
+    needs: gen
     strategy: ${{ fromJson(needs.gen.outputs.strategy) }}
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
