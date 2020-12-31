@@ -43,7 +43,7 @@ strategy = {
   "matrix": {
     "include": [],
     }}
-for im in l[:2]:
+for im in l[:3]:
   tags = []
   if im['variant'] == "apache":
     tags.append(im['version'])
