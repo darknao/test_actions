@@ -8,11 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: playbook
-      uses: dawidd6/action-ansible-playbook@v2.2.0
+    - name: Set up Python 3
+      uses: actions/setup-python@v1
       with:
-        playbook: check.yml
-
+        python-version: "3.x"
+    - name: pip instll
+      run: pip install ansible lxml
+    - name: run playbook
+      run: ansible-playbook check.yml
   gen:
     name: gen
     runs-on: ubuntu-latest
