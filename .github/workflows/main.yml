@@ -3,6 +3,16 @@ on:
   push:
 
 jobs:
+  detect_release:
+    name: detect new release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: playbook
+      uses: dawidd6/action-ansible-playbook@v2.2.0
+      with:
+        playbook: check.yml
+
   gen:
     name: gen
     runs-on: ubuntu-latest

@@ -1,0 +1,67 @@
+---
+- name: check dotclear version
+  hosts: localhost
+  gather_facts: no
+  tasks:
+  - set_fact:
+  #   versions_xml: "{{ lookup('file', 'versions.xml') }}"
+      versions_xml: "{{ lookup('url', 'https://download.dotclear.org/versions.xml', split_lines=False) }}"
+     
+  - xml:
+      xmlstring: "{{ versions_xml }}"
+      xpath: "/versions/subject/release[@name='stable']"
+      content: "attribute"
+    register: versions
+
+  - debug:
+      msg:
+        - "{{ versions.matches.0.release.name }}"
+        - "{{ versions.matches.0.release.version }}"
+        - "{{ versions.matches.0.release.checksum }}"
+
+  - name: check if version exist
+    stat:
+      path: apache/{{ versions.matches.0.release.version }}/Dockerfile
+    register: existing_dockerfile
+
+  - block:
+    - debug:
+        msg: "New version : {{ versions.matches.0.release.version }}"
+
+    - name: Create a directory if it does not exist
+      file:
+        path: apache/{{ version }}
+        state: directory
+        mode: '0755'
+
+    - name: Dockerfile
+      template:
+        src: apache_container.j2
+        dest: apache/{{ version }}/Dockerfile
+
+    - name: entrypoint
+      template:
+        src: docker-entrypoint.sh
+        dest: apache/{{ version }}/docker-entrypoint.sh
+        mode: '0755'
+
+    - name: Create a directory if it does not exist
+      file:
+        path: fpm/{{ version }}
+        state: directory
+        mode: '0755'
+
+    - name: Dockerfile
+      template:
+        src: fpm_container.j2
+        dest: fpm/{{ version }}/Dockerfile
+
+    - name: entrypoint
+      template:
+        src: docker-entrypoint.sh
+        dest: fpm/{{ version }}/docker-entrypoint.sh
+        mode: '0755'
+    when: not existing_dockerfile.stat.exists
+    vars:
+      version: "{{ versions.matches.0.release.version }}"
+      md5: "{{ versions.matches.0.release.checksum }}"
