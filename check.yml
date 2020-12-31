@@ -16,7 +16,7 @@
   - debug:
       msg:
         - "{{ versions.matches.0.release.name }}"
-        - "{{ versions.matches.0.release.version }}"
+        - "::set-output name=version::{{ versions.matches.0.release.version }}"
         - "{{ versions.matches.0.release.checksum }}"
 
   - name: check if version exist
