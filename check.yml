@@ -28,6 +28,8 @@
     loop:
     - var: release_version
       value: "{{ versions.matches.0.release.version }}"
+    - var: release_info
+      value: "{{ versions.matches.0.release.info }}"
 
   - name: check if version exist
     stat:

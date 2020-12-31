@@ -21,23 +21,21 @@ jobs:
       id: cpr
       uses: peter-evans/create-pull-request@v3
       with:
-        commit-message: new release
+        commit-message: Dotclear ${{ env.release_version }}
         committer: GitHub <noreply@github.com>
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
         signoff: false
-        branch: vx.x
+        branch: v${{ env.release_version }}
         delete-branch: true
-        title: '[Example] Dotclear version vx.x'
+        title: 'Dotclear version v${{ env.release_version }}'
         body: |
           New version available!
+          Release info: ${{ env.release_info }}
         labels: |
           automated pr
         assignees: darknao
         reviewers: darknao
 
-    - name: debug
-      run: "echo '${{ env.release_version }}'"
-      
     - name: Check outputs
       run: |
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
