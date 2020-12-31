@@ -3,10 +3,11 @@ on:
   push:
   schedule:
   - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   detect_release:
-    if: ${{ github.event_name == 'schedule' }}
+    if: ${{ github.event_name == 'schedule' or github.event_name == 'workflow_dispatch' }}
     name: detect new release
     runs-on: ubuntu-latest
     steps:
