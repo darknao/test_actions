@@ -15,6 +15,7 @@ jobs:
     - name: pip install
       run: pip install ansible lxml
     - name: run playbook
+      id: playbook
       run: ansible-playbook check.yml
     - name: Create Pull Request
       id: cpr
@@ -34,6 +35,9 @@ jobs:
         assignees: darknao
         reviewers: darknao
 
+    - name: debug
+      run: "echo '${{ steps.playbook.outputs.version }}'"
+      
     - name: Check outputs
       run: |
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
