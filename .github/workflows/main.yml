@@ -7,7 +7,7 @@ on:
 
 jobs:
   detect_release:
-    if: ${{ github.event_name == 'schedule' or github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
     name: detect new release
     runs-on: ubuntu-latest
     steps:
