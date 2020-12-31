@@ -16,8 +16,18 @@
   - debug:
       msg:
         - "{{ versions.matches.0.release.name }}"
-        - "::set-output name=version::{{ versions.matches.0.release.version }}"
+        - "{{ versions.matches.0.release.version }}"
         - "{{ versions.matches.0.release.checksum }}"
+
+  - name: set github env variables
+    when: lookup('env', 'GITHUB_ENV')
+    lineinfile:
+      path: "{{ lookup('env', 'GITHUB_ENV') }}"
+      line: "{{ item.var }}={{ item.value }}"
+      create: yes
+    loop:
+    - var: release_version
+      value: "{{ versions.matches.0.release.version }}"
 
   - name: check if version exist
     stat:

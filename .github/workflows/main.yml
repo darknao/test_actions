@@ -36,7 +36,7 @@ jobs:
         reviewers: darknao
 
     - name: debug
-      run: "echo '${{ steps.playbook.outputs.version }}'"
+      run: "echo '${{ env.release_version }}'"
       
     - name: Check outputs
       run: |
