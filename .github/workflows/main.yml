@@ -1,9 +1,12 @@
 name: CI
 on:
   push:
+  schedule:
+  - cron: '0 0 * * 1'
 
 jobs:
   detect_release:
+    if: ${{ github.event_name == 'schedule' }}
     name: detect new release
     runs-on: ubuntu-latest
     steps:
@@ -40,15 +43,16 @@ jobs:
       run: |
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
         echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+
   gen:
-    name: gen
+    name: Generate build jobs
     runs-on: ubuntu-latest
     outputs:
       strategy: ${{ steps.gen.outputs.strategy }}
     steps:
     - uses: actions/checkout@v2
     - id: gen
-      name: gen
+      name: Get images list
       run: python gen.py
 
   build:
@@ -57,9 +61,6 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
-    - name: debug
-      run: "echo '${{ matrix.tags }}'"
-
     - name: Checkout
       uses: actions/checkout@v2
 
