@@ -12,10 +12,32 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: "3.x"
-    - name: pip instll
+    - name: pip install
       run: pip install ansible lxml
     - name: run playbook
       run: ansible-playbook check.yml
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: new release
+        committer: GitHub <noreply@github.com>
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        signoff: false
+        branch: vx.x
+        delete-branch: true
+        title: '[Example] Dotclear version vx.x'
+        body: |
+          New version available!
+        labels: |
+          automated pr
+        assignees: darknao
+        reviewers: darknao
+
+    - name: Check outputs
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
   gen:
     name: gen
     runs-on: ubuntu-latest
