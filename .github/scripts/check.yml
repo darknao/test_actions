@@ -75,6 +75,21 @@
         src: docker-entrypoint.sh
         dest: "{{ (repo_path, 'fpm', version, 'docker-entrypoint.sh') | path_join }}"
         mode: '0755'
+
+    - name: list all tags
+      script:
+        cmd: gen.py
+        chdir: "{{ repo_path }}"
+      register: gen_out
+
+    - set_fact:
+        tag_list: "{{ gen_out.stdout | from_json }}"
+
+    - name: regen README.md
+      template:
+        src: README.md.j2
+        dest: "{{ (repo_path, 'README.md') | path_join }}"
+
     when: not existing_dockerfile.stat.exists
     vars:
       version: "{{ versions.matches.0.release.version }}"
